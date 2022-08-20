@@ -1,30 +1,38 @@
 const express = require('express');
 const userRouter = express.Router();
-const {getUsers,getUserById,updateUser,deleteUser,postUser} = require('../controller/userController');
+const {getUser,getAllUser,updateUser,deleteUser} = require('../controller/userController');
 const cookieParser = require('cookie-parser');
-const protectRoute = require('../routers/authHelper');
+//const protectRoute = require('../routers/authHelper');
+const { signUp, loginUser, isAuthorised, protectRoute } = require('../controller/authController');
 const app = express();
 app.use('/user',userRouter);
 app.use(cookieParser());
+
+// user options
 userRouter
-.route('/')
-.get(protectRoute,getUsers)
-.post(postUser)
+.route('/:id')
 .patch(updateUser)
 .delete(deleteUser)
 
-// userRouter
-// .route('/setCookies')
-// .get(setCookies)
-
-// userRouter
-// .route('/getCookies')
-// .get(getCookies)
+userRouter
+.route('/signup')
+.post(signUp)
 
 userRouter
-.route('/:id')
-.get(getUserById)
+.route('/login')
+.post(loginUser)
 
+//profile page
+app.use(protectRoute);
+userRouter
+.route('/userProfile')
+.get(protectRoute,getUser)
+
+//admin func
+app.use(isAuthorised(['admin']));
+userRouter
+.route('/')
+.get(getAllUser)
 
 
 module.exports = userRouter;

@@ -35,16 +35,27 @@ const userSchema = mongoose.Schema({
         validate: function(){
             return this.confirmPassword == this.password;
         }
+    },
+    role:{
+        type:String,
+        enum:['admin','user','restrauntOwner','deliveryBoy'],
+        default: 'user'
+    },
+    profileImage:{
+        type: String,
+        default: 'img/users/default.jpeg'
     }
 });
+// userSchema.pre('save',function(){
+//     console.log("before saving to db",this);
+// });
+// userSchema.post('save',function(db){
+//     console.log("after saving to db",db);
+// });
 userSchema.pre('save',function(){
-    console.log("before saving to db",this);
-});
-userSchema.post('save',function(db){
-    console.log("after saving to db",db);
-});
-userSchema.pre('save',function(){
+    if(this.confirmPassword){
     this.confirmPassword = undefined;
+    }
 });
 userSchema.pre('save',async function() {
     //let salt = await bcrypt.genSalt(1);

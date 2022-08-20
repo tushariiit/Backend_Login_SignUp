@@ -5,9 +5,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.listen(3000);
 const userRouter = require('./routers/userRouter');
-const authRouter = require('./routers/authRouter');
+//const authRouter = require('./routers/authRouter');
 app.use('/user',userRouter);
-app.use('/auth',authRouter);
+//app.use('/auth',authRouter);
 
 // let users = [
 //     {
